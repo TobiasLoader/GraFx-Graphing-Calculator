@@ -42,7 +42,7 @@ var primEqu;
 function setup() {
 // 	graph(["4x^-2"],4);
 	
-	primEqu = prompt("Please provide the primary polynomial (between each term type + with spaces before and after. Leave no other spaces or plus symbols in the rest to the expression). Every term must be in the form: ax^b. Only integers are currently accepted. Do not include 'y = '.").split(" + ");
+	primEqu = prompt("Please provide the primary polynomial (between each term type + with spaces before and after. Leave no other spaces or plus symbols in the rest to the expression). Every term must be in the form: ax^b. Only integers are currently accepted. Do not include 'y = '.\nExample: '2x^3 + -4x^2 + -x + 7'").split(" + ");
 	
 	W = windowWidth;
 	H = windowHeight;	
