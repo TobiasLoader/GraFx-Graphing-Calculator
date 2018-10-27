@@ -42,9 +42,9 @@ var primEqu;
 function setup() {
 // 	graph(["4x^-2"],4);
 	
-	primEqu = prompt("Please provide the primary polynomial (between each term type + with spaces before and after. Leave no other spaces or plus symbols in the rest to the expression). Every term must be in the form: ax^b. Only integers are currently accepted. Do not include 'y = '.\nExample: '2x^3 + -4x^2 + -x + 7'").split(" + ");
+// 	primEqu = prompt("Please provide the primary polynomial (between each term type + with spaces before and after. Leave no other spaces or plus symbols in the rest to the expression). Every term must be in the form: ax^b. Only integers are currently accepted. Do not include 'y = '.\nExample: 2x^3 + -4x^2 + -x + 7").split(" + ");
 	
-	W = windowWidth;
+	W = 5*windowWidth/6;
 	H = windowHeight;	
 	textFont("Avenir Next");
 	rectMode(CENTER);
@@ -57,12 +57,14 @@ function setup() {
 	unitPix = 10;
 	F = [];
 	lastX = [];
+/*
 	PlotAccuracy = prompt("Plot Accuracy - eg: 10\n(Higher Num = Better Quality): ");
 	if (!PlotAccuracy|| isNaN(PlotAccuracy)){
 		PlotAccuracy = 10;
 		alert("INPUT INVALID.\nPlot Accuracy has defaulted to 10.");
 	}
-	PlotAccuracy = 1/PlotAccuracy;
+*/
+	PlotAccuracy = 1/20;
 	isScrolling = false;  
 	poppedExtra = false;
 	defineBorders();
@@ -74,7 +76,7 @@ function setup() {
 	ColourFunc = [color(232, 73, 48),color(55, 153, 26),color(55, 143, 173),color(255, 204, 0),color(184, 75, 198),color(252, 151, 0)];
 
 	
-  createCanvas(W, H);	
+  createCanvas(windowWidth, windowHeight);	
   initFuncs();
   plotFuncs(lastX);
   drawINIT();
@@ -85,4 +87,27 @@ function defineBorders(){
 	PixRealXW = PixRealS(W,OxDrag,W);
 	PixRealY0 = PixRealS(0,OyDrag,H);
 	PixRealYH = PixRealS(H,OyDrag,H);
+}
+
+function promalert(i){
+	swal({   title: "Edit the graph !",   
+    text: "Enter the new graph:",   
+    type: "input",   
+    showCancelButton: true,   
+    closeOnConfirm: false,   
+    animation: "slide-from-top",   
+    inputPlaceholder: inputFunc[i] }, 
+    
+    function(inputValue){   
+        if (inputValue === false) return false;      
+        if (inputValue === "") { 
+          swal.showInputError("We're deleting this graph!");  
+        } else {      
+         	swal("Action Saved!", "You entered following expression: " + inputValue, "success"); 
+        }
+				inputFunc[i] = inputValue;
+				initFuncs();
+				plotFuncs();
+				drawINIT();
+    });
 }

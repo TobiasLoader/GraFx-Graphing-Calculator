@@ -1,7 +1,9 @@
 
 // FUNCTIONS: LINES, CURVES
 
-var FuncList = [f];
+var FuncList = [f,g,h,i,j,k];
+
+var inputFunc = ["x + 6","x^2 + -3","","","",""];
 
 function graph(polynomial,x){
 	var expression = 0;
@@ -80,31 +82,37 @@ function graph(polynomial,x){
 		print("Exponent",numList[1]);
 		print("Expression",numList[0],"*",x,"^",numList[1],"=",numList[0]*Math.pow(x,numList[1]));
 		
-*/expression += (numList[0])*Math.pow(x,numList[1]);
+*/	expression += (numList[0])*Math.pow(x,numList[1]);
 	}
 	return expression;
-// 	return expression;
+}
+
+function updateGraphs(){
+	for (var f=0; f<FuncList.length; f+=1){
+		if (dist(mouseX,mouseY,(sideX+windowWidth)/2,80+(H/8)*(f+1))<5+H/40){
+// 			inputFunc[f] = prompt("",inputFunc[f]);
+			promalert(f);
+		}
+	}
 }
 
 function f(x){
-	if (primEqu){
-		return graph(primEqu,x);
-	}
+	return graph(inputFunc[0].split(" + "),x);
 }
 function g(x){
-	return pow(x,2)-3;
+	return graph(inputFunc[1].split(" + "),x);
 }
 function h(x){
-	return pow(x,4)-4*pow(x,3)+(8*x)+(2);
+	return graph(inputFunc[2].split(" + "),x);
 }
 function i(x){
-	return 2/x;
+	return graph(inputFunc[3].split(" + "),x);
 }
 function j(x){
-	return 100*pow(1.01,-x);
+	return graph(inputFunc[4].split(" + "),x);
 }
 function k(x){
-	return -j(x);
+	return graph(inputFunc[5].split(" + "),x);
 }
 
 // POINTS: SERIES, INDIVIDUAL POINTS

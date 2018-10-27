@@ -38,6 +38,7 @@ function drawINIT(){
   linePix([W/2-10,H/2],[W/2+10,H/2]);
   linePix([W/2,H/2-10],[W/2,H/2+10]);
   isScrolling = false;
+  sidebar();
 //   poppedExtra = false;
 }
 function popExtra(){
@@ -179,26 +180,30 @@ for (var n=0; n<FuncList.length; n+=1){
 */
 
 	for (var n=0; n<FuncList.length; n+=1){
-		for (var x=-PlotAccuracy/s; x>=PixRealX0; x-=(PlotAccuracy/(2*s))){
-			var y = FuncList[n](x);
-			if (y<PixRealYH && y>PixRealY0){
-				F[n][0].push([x,y]);
-			} else {
-				F[n][0].push(false);
+		if (inputFunc[n]){
+			for (var x=-PlotAccuracy/s; x>=PixRealX0; x-=(PlotAccuracy/(2*s))){
+				var y = FuncList[n](x);
+				if (y<PixRealYH && y>PixRealY0 && x<PixRealXW){
+					F[n][0].push([x,y]);
+				} else {
+					F[n][0].push(false);
+				}
+	// 			lastX[n][0]=x;
 			}
-// 			lastX[n][0]=x;
 		}
 // 		F[n][0].reverse();
 	}
 	for (var n=0; n<FuncList.length; n+=1){
-		for (var x=PlotAccuracy/s; x<=PixRealXW; x+=(PlotAccuracy/(2*s))){
-			var y = FuncList[n](x);
-			if (y<PixRealYH && y>PixRealY0){
-				F[n][1].push([x,y]);
-			} else {
-				F[n][1].push(false);
+		if (inputFunc[n]){
+			for (var x=PlotAccuracy/s; x<=PixRealXW; x+=(PlotAccuracy/(2*s))){
+				var y = FuncList[n](x);
+				if (y<PixRealYH && y>PixRealY0 && x>PixRealX0){
+					F[n][1].push([x,y]);
+				} else {
+					F[n][1].push(false);
+				}
+	// 			lastX[n][0]=x;
 			}
-// 			lastX[n][0]=x;
 		}
 	}
 // 	print(F);
@@ -209,11 +214,12 @@ function selectFuncs(){
 	var preciseTo = round(1/(20*realD));
 	if (mouseIsPressed && dragging===false){
 		for (var n=0; n<FuncList.length; n+=1){
-			var X = precise(FuncList[n](PixRealS(mouseX,OxDrag,W)),preciseTo);
-			var Y = precise(PixRealS(H-mouseY,OyDrag,H),preciseTo);
-			
-			if (X > Y-pow(2,-preciseTo) && X<Y+pow(2,-preciseTo)){
-				graphClicked = FuncList[n];
+			if (inputFunc[n]){
+				var X = precise(FuncList[n](PixRealS(mouseX,OxDrag,W)),preciseTo);
+				var Y = precise(PixRealS(H-mouseY,OyDrag,H),preciseTo);
+				if (X > Y-pow(2,-preciseTo) && X<Y+pow(2,-preciseTo) && mouseX<W){
+					graphClicked = FuncList[n];
+				}
 			}
 		}
 	}
@@ -251,11 +257,15 @@ function drawAxis(){
 	stroke(100, 120, 200);
 	strokeWeight(1);
 	O = RealPix([0,0]);
-	linePix([O[0],0],[O[0],H]);
-	linePix([0,O[1]],[W,O[1]]);
+	if (O[0]>0 && O[0]<W){
+		linePix([O[0],0],[O[0],H]);
+	}if (O[1]>0 && O[1]<H){
+		linePix([0,O[1]],[W,O[1]]);
+	}
 }
 function drawLabels(Coor,denom,fraction,X,Y,dimension){
 	if (round(denom*Coor)){
+		textSize(12);
 		var TXT = "";
 		if (fraction || denom===1){
 			TXT = str(round(Coor));
@@ -312,29 +322,29 @@ function drawGuideLines(){
 		denom = round(1/denom);
 	}
 	for (var X=O[0]; X<W; X+=d){
-		linePix([X,0],[X,H]);
+		if (X>0){linePix([X,0],[X,H]);}
 	}
 	for (var X=O[0]; X>0;X-=d){
-		linePix([X,0],[X,H]);
+		if (X<W){linePix([X,0],[X,H]);}
 	}
 	for (var Y=O[1]; Y<H;Y+=d){
-		linePix([0,Y],[W,Y]);
+		if (Y>0){linePix([0,Y],[W,Y]);}
 	}
 	for (var Y=O[1]; Y>0;Y-=d){
-		linePix([0,Y],[W,Y]);
+		if (Y<H){linePix([0,Y],[W,Y]);}
 	}
 	noStroke();
 	for (var X=O[0]; X<W; X+=d){
-		drawLabels(PixRealS(X,OxDrag,W),denom,fraction,X,O[1],W);
+		if (X>0){drawLabels(PixRealS(X,OxDrag,W),denom,fraction,X,O[1],W);}
 	}
 	for (var X=O[0]; X>0;X-=d){
-		drawLabels(PixRealS(X,OxDrag,W),denom,fraction,X,O[1],W);
+		if (X<W){drawLabels(PixRealS(X,OxDrag,W),denom,fraction,X,O[1],W);}
 	}
 	for (var Y=O[1]; Y<H;Y+=d){
-		drawLabels(PixRealS(H-Y,OyDrag,H),denom,fraction,O[0],Y,H);
+		if (Y>0){drawLabels(PixRealS(H-Y,OyDrag,H),denom,fraction,O[0],Y,H);}
 	}
 	for (var Y=O[1]; Y>0;Y-=d){
-		drawLabels(PixRealS(H-Y,OyDrag,H),denom,fraction,O[0],Y,H);
+		if (Y<H){drawLabels(PixRealS(H-Y,OyDrag,H),denom,fraction,O[0],Y,H);}
 	}
 }
 function drawPoints(){
@@ -381,12 +391,18 @@ function keyPressed(){
 }
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
-  W = windowWidth;
+  if (windowWidth>600){
+  	W = 5*windowWidth/6;
+  } else {
+	  W = windowWidth-100;
+  }
   H = windowHeight;
-  drawINIT();
+  initFuncs();
+	plotFuncs();
+	drawINIT();
 }
 function mouseDragged(){
-	if (!graphClicked){
+	if (!graphClicked && mouseX<W){
 		dragging = true;
 		OxDrag += (mouseX-pmouseX)/(unitPix*s);
 		OyDrag -= (mouseY-pmouseY)/(unitPix*s);
@@ -396,12 +412,14 @@ function mouseDragged(){
 }
 function mouseWheel(event){
 /* 	print(lastX); */
-	ScaleBy = pow(sConst,event.delta)
- 	s*=ScaleBy;
- 	isScrolling = true;
- 	d = unitPix*s;
- 	initFuncs();
- 	plotFuncs();
+	if (mouseX<W){
+		ScaleBy = pow(sConst,event.delta)
+	 	s*=ScaleBy;
+	 	isScrolling = true;
+	 	d = unitPix*s;
+	 	initFuncs();
+	 	plotFuncs();
+ 	}
 /*
  	Mouse = PixRel([mouseX,mouseY]);
  	sXDiff -= ScaleBy*(Mouse[0]);
@@ -411,26 +429,28 @@ function mouseWheel(event){
 //  print(F);
 }
 function mouseClicked(){
-	for (p=0; p<P.length; p+=1){
-		if (dist(mouseX,mouseY,RealPixS(P[p][0],OxDrag,W),RealPixS(P[p][1],OyDrag,H))<5){
-			var inPc = false;
-			var theP = [precise(P[p][0]), precise(P[p][1])];
-			for (var pC=0; pC<pointsClicked.length; pC+=1){
-				if (theP[0] === precise(pointsClicked[pC][0]) && theP[1] === precise(pointsClicked[pC][1])){
-					inPc = true;
-					break;
+	if (mouseX<W){
+		for (p=0; p<P.length; p+=1){
+			if (dist(mouseX,mouseY,RealPixS(P[p][0],OxDrag,W),RealPixS(P[p][1],OyDrag,H))<5){
+				var inPc = false;
+				var theP = [precise(P[p][0]), precise(P[p][1])];
+				for (var pC=0; pC<pointsClicked.length; pC+=1){
+					if (theP[0] === precise(pointsClicked[pC][0]) && theP[1] === precise(pointsClicked[pC][1])){
+						inPc = true;
+						break;
+					}
 				}
+				if (inPc){
+					removeEl(pointsClicked,theP);
+				} else {
+					pointsClicked.push(theP);
+				}
+				break;
 			}
-			if (inPc){
-				removeEl(pointsClicked,theP);
-			} else {
-				pointsClicked.push(theP);
-			}
-			print("");
-			break;
 		}
+	} else {
+		updateGraphs();
 	}
-// 	print(pointsClicked);
 	drawINIT();
 }
 function mouseReleased(){
