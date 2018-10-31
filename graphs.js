@@ -3,7 +3,7 @@
 
 var FuncList = [f,g,h,i,j,k];
 
-var inputFunc = ["x + 6","x^2 + -3","","","",""];
+var inputFunc = ["x + 6.5","x^2 + -3","","","",""];
 
 function graph(polynomial,x){
 	var expression = 0;
@@ -11,6 +11,7 @@ function graph(polynomial,x){
 	var store = [];
 	var num = 0;
 	var neg = false;
+	var dotPos = false;
 	var xTerm = false;
 	var startNum = "F";
 	var lastNum = "F";
@@ -24,8 +25,23 @@ function graph(polynomial,x){
 						store.splice(0,1);
 						neg = true;
 					}
-					for (var k=0; k<store.length; k+=1){
-						num += store[k]*Math.pow(10,k);
+					
+					for (var i=0; i<store.length; i+=1){
+						if  (store[i]==="."){
+							store.splice(i,1);
+							dotPos = store.length-i;
+						}
+					}
+					if (!dotPos){
+						dotPos = 0;
+					}
+					
+					store.reverse();
+					for (var k=dotPos; k<store.length; k+=1){
+						num += store[k]*Math.pow(10,k-dotPos);
+					}
+					for (var k=dotPos; k>0; k-=1){
+						num += store[k-1]*Math.pow(10,k-dotPos-1);
 					}
 					if (neg){
 						num = -num;
@@ -34,7 +50,7 @@ function graph(polynomial,x){
 				if (startNum===0 && !xTerm){
 					numList[0] = num;
 				}
-				if (lastNum===polynomial[i].length-1 && xTerm){
+				if (xTerm){
 					numList[1] = num;
 				}
 			}
@@ -42,6 +58,7 @@ function graph(polynomial,x){
 			num = 0;
 			number = false;
 			neg = false;
+			dotPos = false;
 			startNum = "F";
 			lastNum = "F";
 	}
@@ -51,7 +68,7 @@ function graph(polynomial,x){
 		numList = [1,0];
 		for (var j=0; j<polynomial[i].length; j+=1){
 			
-			if (parseInt(polynomial[i][j]) || polynomial[i][j]==="-"){
+			if (parseInt(polynomial[i][j]) || polynomial[i][j]==="0" || polynomial[i][j]==="-" || polynomial[i][j]==="."){
 // 				print(j);
 				if (startNum === "F"){
 					startNum = j;
@@ -59,7 +76,7 @@ function graph(polynomial,x){
 				lastNum = j;
 				number = true;
 				if (parseInt(polynomial[i][j])) { store.push(parseInt(polynomial[i][j])); }
-				else {store.push("-");}
+				else {store.push(polynomial[i][j]);}
 			} else {
 				numberEnd();
 			}
@@ -191,9 +208,9 @@ function createPoints(){
 	P = [];
 	/*
 GP(100,-0.99);
-	GP(100,-0.99,true)
-*/;
-// 	AP(0,0.1,false,true);
+	GP(100,-0.99,true);
+*/
+/* 	AP(0,0.1,false,true); */
 // 	AP(0,0.1,true);
 	P.concat(IndiPoints);
 }

@@ -78,6 +78,10 @@ function precise(x,n) {
 	}
   return float(Number.parseFloat(x).toPrecision(n));
 }
+function isInt(x){
+	var n = Number.isInteger(x);
+	return (n || n===0);
+}
 
 function RealRelS(Coor,Drag,Dimension){
 	var output = (s*(Drag+Coor)*unitPix*2)/(Dimension);
@@ -211,7 +215,7 @@ for (var n=0; n<FuncList.length; n+=1){
 }
 function selectFuncs(){
 // 	print(graphClicked);
-	var preciseTo = round(1/(20*realD));
+	var preciseTo = round(1/(5*realD));
 	if (mouseIsPressed && dragging===false){
 		for (var n=0; n<FuncList.length; n+=1){
 			if (inputFunc[n]){
@@ -228,10 +232,29 @@ function selectFuncs(){
 		stroke(50);
 		var realX = PixRealS(mouseX,OxDrag,W);
 		var realY = graphClicked(realX);
+		var X = "NONE";
+		var Y = "NONE";
 		point(mouseX,RealPixS(realY,OyDrag,H));
 		fill(50);
 		noStroke();
-		text("("+str(precise(realX))+", "+str(precise(realY))+")", mouseX, precise(RealPixS(realY,OyDrag,H))-15);
+		if (s<1.2){
+			X = round(realX);
+			Y = round(realY);
+		} else {
+			if (isInt(precise(realX,2))){
+				X = round(realX);
+			}
+			if (isInt(precise(realY,2))){
+				Y = round(realY);
+			}
+		}
+		if (X==="NONE"){
+			X = precise(realX);
+		}
+		if (Y==="NONE"){
+			Y = precise(realY);
+		}
+		text("("+str(X)+", "+str(Y)+")", mouseX, precise(RealPixS(realY,OyDrag,H))-15);
 	}
 }
 
@@ -273,7 +296,7 @@ function drawLabels(Coor,denom,fraction,X,Y,dimension){
 			if (Number.isInteger(round(denom*Coor)/denom)){
 				TXT = str(round(Coor));
 			} else {
-				TXT = str(round(denom*Coor))+"/"+str(denom);
+			TXT = str(round(denom*Coor))+"/"+str(denom);
 			}
 		}
 		
