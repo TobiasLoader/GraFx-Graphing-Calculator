@@ -13,9 +13,10 @@
 */
 
 function draw() {
-  if (mouseX!==pmouseX || mouseY!==pmouseY || mouseIsPressed || isScrolling){
+    if (mouseX!==pmouseX || mouseY!==pmouseY || mouseIsPressed || isScrolling){
 		drawINIT();
-  }/*
+    }
+/*
  else {
 	  if (!poppedExtra){
 	  	popExtra();
@@ -25,8 +26,9 @@ function draw() {
 }
 
 function drawINIT(){
+	cursor('default');
 	setSizeVars();
-	background(245,250,255);
+	background(247, 251, 255);
 	defineBorders();
   drawAxis();
   drawGuideLines();
@@ -39,8 +41,24 @@ function drawINIT(){
   linePix([W/2,H/2-10],[W/2,H/2+10]);
   isScrolling = false;
   sidebar();
+    if (!intructionPressed){
+		popUpMessage("Press the 'I' Key to View Instructions",1);
+	}
 //   poppedExtra = false;
 }
+
+function popUpMessage(MESSAGE,priority){
+	textSize(13);
+	fill(150,200,250,100);
+	stroke(6, 81, 156);
+	strokeWeight(1);
+	rect(33,33+(priority-1)*100 + 10,250,45,2);
+	fill(6, 81, 156);
+	noStroke();
+	textAlign(CENTER,CENTER);
+	text(MESSAGE,33+5,66+(priority-1)*100,250-10);
+}
+
 function popExtra(){
 	var fPix;
 	for (var f=0; f<F.length; f+=1){
@@ -289,6 +307,7 @@ function drawAxis(){
 function drawLabels(Coor,denom,fraction,X,Y,dimension){
 	if (round(denom*Coor)){
 		textSize(12);
+		textAlign(CENTER,CENTER);
 		var TXT = "";
 		if (fraction || denom===1){
 			TXT = str(round(Coor));
@@ -302,7 +321,7 @@ function drawLabels(Coor,denom,fraction,X,Y,dimension){
 		
 		if (O[0]<20 && dimension===H){
 			fill(30,40,50);
-			text(TXT,20,Y);
+			text(TXT,20,Y+5);
 		} else if (O[0]>W-20 && dimension===H){
 			fill(30,40,50);
 			text(TXT,W-20,Y);
@@ -313,10 +332,12 @@ function drawLabels(Coor,denom,fraction,X,Y,dimension){
 			fill(30,40,50);
 			text(TXT,X,H-20);
 		} else {
+			rectMode(CENTER);
 			fill(245,250,255);
 			rect(X,Y,textWidth(TXT)+5,15);
 			fill(30,40,50);
 			text(TXT,X,Y);
+			rectMode(CORNER);
 		}
 	}
 	
@@ -334,7 +355,7 @@ function setSizeVars(){
 
 function drawGuideLines(){
 	textAlign(CENTER,CENTER);
-	stroke(90, 171, 199);
+	stroke(90, 171, 199,100);
 	strokeWeight(1/2);
 	var denom = realD;
 	if (denom>=1){
@@ -411,6 +432,10 @@ function keyPressed(){
 	if (keyCode===80){
 		print(lastX[0][0]);
 	}
+	if (keyCode===73){
+		intructionPressed = true;
+		alert('GraFx – INSTRUCTIONS\n\nKEY:\nThe filled circles in the right sidebar represent functions that are defined and are being plotted, whilst those more transparent with a plus in the centre represent functions that have not yet been defined. By making use of all functions, it is possible to draw up to 6 polynomials at a time on GraFx. The graph of each function is colour coded according to its corresponding circle in the sidebar.\n\nEDITING:\nTo edit an existing function, click on a filled circle in the sidebar and type a new equation into the pop-up box (PLEASE FIRST REFER TO THE FORMATTING RULES, BELOW). To define a new function, click on a circle with a plus in the centre and type a new equation into the pop up box. To delete a graph, click on a filled circle and leave the input blank. Then click the OK button, such that the pop up says \'We\'re deleting this graph!\', then finally, click the CANCEL button.\n\nFORMATTING RULES:\nWhen inputting an equation for a polynomial, it must be entered according to the following rules: a*x^n + b*x^m + [...]\nSo every term must be separated by a \' + \'\nE.g: (x + 6.5), (-0.5*x^2 + 6), or (5*x^3 + -2*x^2 + -3*x + 1.5)\n');
+	}
 }
 function windowResized(){
   resizeCanvas(windowWidth, windowHeight);
@@ -434,22 +459,22 @@ function mouseDragged(){
 	}
 }
 function mouseWheel(event){
-/* 	print(lastX); */
+	/* 	print(lastX); */
 	if (mouseX<W){
 		ScaleBy = pow(sConst,event.delta)
-	 	s*=ScaleBy;
+	 	s/=ScaleBy;
 	 	isScrolling = true;
 	 	d = unitPix*s;
 	 	initFuncs();
 	 	plotFuncs();
  	}
-/*
- 	Mouse = PixRel([mouseX,mouseY]);
- 	sXDiff -= ScaleBy*(Mouse[0]);
- 	sYDiff -= ScaleBy*(Mouse[1]);
- 	print(sXDiff);
-*/
-//  print(F);
+	/*
+	 	Mouse = PixRel([mouseX,mouseY]);
+	 	sXDiff -= ScaleBy*(Mouse[0]);
+	 	sYDiff -= ScaleBy*(Mouse[1]);
+	 	print(sXDiff);
+	*/
+	//  print(F);
 }
 function mouseClicked(){
 	if (mouseX<W){

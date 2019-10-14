@@ -3,7 +3,7 @@
 
 var FuncList = [f,g,h,i,j,k];
 
-var inputFunc = ["x + 6.5","x^2 + -3","","","",""];
+var inputFunc = ["x + 6.5","-0.5*x^2 + 6","5*x^3 + -2*x^2 + -3*x + 1.5","","",""];
 
 function graph(polynomial,x){
 	var expression = 0;

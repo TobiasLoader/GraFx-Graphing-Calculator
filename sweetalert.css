@@ -144,6 +144,7 @@ body.stop-scrolling {
       outline: none;
       box-shadow: 0px 0px 3px #c4e6f5;
       border: 1px solid #b4dbed; }
+/*
       .sweet-alert input:focus::-moz-placeholder {
         transition: opacity 0.3s 0.03s ease;
         opacity: 0.5; }
@@ -153,6 +154,7 @@ body.stop-scrolling {
       .sweet-alert input:focus::-webkit-input-placeholder {
         transition: opacity 0.3s 0.03s ease;
         opacity: 0.5; }
+*/
     .sweet-alert input::-moz-placeholder {
       color: #bdbdbd; }
     .sweet-alert input:-ms-input-placeholder {

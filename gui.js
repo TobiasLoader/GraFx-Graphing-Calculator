@@ -11,15 +11,14 @@ function sidebar(){
   line(sideX,0,sideX,H);
   noStroke();
   fill(254);
-  rect((sideX+windowWidth)/2,H/2,windowWidth-sideX,H);
+  rect(sideX,0,windowWidth-sideX,H);
   fill(120);
-  textSize(15+W/80);
-  text("GraFx",(sideX+windowWidth)/2,50);
+  textSize(17+W/70);
+  text("GraFx",(sideX+windowWidth)/2-2,50+3);
   colCircles();
 }
 
 function colCircles(){
-	
 	strokeWeight(1);
 	for (var f=0; f<FuncList.length; f+=1){
 		if (inputFunc[f]){
@@ -33,5 +32,8 @@ function colCircles(){
 			noStroke();
 		}
 		ellipse((sideX+windowWidth)/2,80+(H/8)*(f+1),10+H/20,10+H/20);
+		if (dist((sideX+windowWidth)/2,80+(H/8)*(f+1),mouseX,mouseY)<(10+H/20)/2){
+			cursor('pointer');
+		}
 	}
 }
