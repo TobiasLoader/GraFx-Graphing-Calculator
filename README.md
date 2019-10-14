@@ -1,5 +1,4 @@
-# GraFx-Graphing-Calculator
-My very own Graphing Calculator.
-Link: https://tobiasloader.github.io/GraFx-Graphing-Calculator/
+# GraFx Graphing Calculator
+Although I frequently use the online graphing calculator Desmos, and think it is an amazing resource, I have sometimes wanted the ability to plot various graphs for which Desmos offers limited functionality; such as arithmetic and geometric progressions. So, in autumn 2018 I wrote my own personal graphing calculator, GraFx, to solve this issue. Whilst GraFx is able to plot basic polynomials through its online interface, it was designed to respond to directly inputted source code and is therefore most suitable for local use. Its user can write their own functions, exactly as required – providing more freedom than Desmos allows, e.g. if I wished to plot complex numbers on an Argand diagram I could adapt the GraFx’s source code to achieve this.
 
 <!-- CREDIT TO jquery-az.com for the sweetalert Pop Up (drop down user input box)-->
